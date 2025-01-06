@@ -1,12 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+#include "shell.h"
 
 /**
- * main - Entry point for the simple shell
+ * main - The main shell program that handles command execution
  *
  * Return: Always 0
  */
@@ -21,49 +16,41 @@ int main(void)
 	/* Display the prompt */
 	while (1)
 	{
-		/* Print prompt */
 		write(STDOUT_FILENO, "#cisfun$ ", 9);
 
-		/* Get the command line input from user */
 		read = getline(&line, &len, stdin);
-
-		/* Handle EOF (Ctrl+D) */
 		if (read == -1)
 		{
 			write(STDOUT_FILENO, "\n", 1);
 			break; /* Exit the shell */
 		}
 
-		/* Remove trailing newline character from the input */
 		if (line[read - 1] == '\n')
 			line[read - 1] = '\0';
 
-		/* Create a child process to execute the command */
 		pid = fork();
-
 		if (pid == -1)
 		{
 			perror("fork failed");
-			exit(1); /* Exit if fork fails */
+			free(line);  /* Free allocated memory */
+			exit(1);
 		}
 		else if (pid == 0)  /* Child process */
 		{
-			/* Try to execute the command */
-			if (execve(line, &line, NULL) == -1)
+			char *args[] = {line, NULL};
+			if (execve(line, args, NULL) == -1)
 			{
-				/* If execve fails, print an error */
-				perror("./shell");
+				perror("./hsh");
+				free(line);  /* Free allocated memory */
 				exit(1);
 			}
 		}
-		else  /* Parent process */
+		else
 		{
 			wait(&status);  /* Wait for the child to terminate */
 		}
 	}
 
-	/* Free allocated memory */
 	free(line);
-
-	return (0);  /* Successful exit */
+	return (0);
 }
