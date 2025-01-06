@@ -10,5 +10,7 @@
 #include <errno.h>
 
 int main(void);
+void execute_command(char *command);
+
 
 #endif /* SHELL_H */

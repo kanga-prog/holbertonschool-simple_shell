@@ -1,56 +1,82 @@
 #include "shell.h"
 
+#define BUFFER_SIZE 1024
+
 /**
- * main - The main shell program that handles command execution
- *
- * Return: Always 0
+ * execute_command - Executes a command by forking a child process.
+ * @command: The command to execute.
+ */
+void execute_command(char *command)
+{
+    pid_t pid = fork();
+
+    if (pid == -1)
+    {
+        perror("Fork failed");
+        exit(1);
+    }
+
+    if (pid == 0)
+    {
+        char *argv[2];
+
+        argv[0] = command;
+        argv[1] = NULL;
+
+        if (execve(command, argv, NULL) == -1)
+        {
+            perror(command);
+        }
+
+        exit(1);
+    }
+    else
+    {
+        wait(NULL);
+    }
+}
+
+/**
+ * main - Main entry point of the shell program.
+ * Return: Always 0.
  */
 int main(void)
 {
-	char *line = NULL;    /* Input command line */
-	size_t len = 0;       /* Length of the input */
-	ssize_t read;         /* Number of characters read */
-	pid_t pid;            /* Process ID */
-	int status;           /* Process status */
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t nread;
 
-	/* Display the prompt */
-	while (1)
-	{
-		write(STDOUT_FILENO, "#cisfun$ ", 9);
+    while (1)
+    {
+        printf("#cisfun$ ");
+        nread = getline(&line, &len, stdin);
 
-		read = getline(&line, &len, stdin);
-		if (read == -1)
-		{
-			write(STDOUT_FILENO, "\n", 1);
-			break; /* Exit the shell */
-		}
+        if (nread == -1)
+        {
+            printf("\n");
+            break;
+        }
 
-		if (line[read - 1] == '\n')
-			line[read - 1] = '\0';
+        if (line[nread - 1] == '\n')
+        {
+            line[nread - 1] = '\0';
+        }
 
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("fork failed");
-			free(line);  /* Free allocated memory */
-			exit(1);
-		}
-		else if (pid == 0)  /* Child process */
-		{
-			char *args[] = {line, NULL};
-			if (execve(line, args, NULL) == -1)
-			{
-				perror("./hsh");
-				free(line);  /* Free allocated memory */
-				exit(1);
-			}
-		}
-		else
-		{
-			wait(&status);  /* Wait for the child to terminate */
-		}
-	}
+        if (strlen(line) == 0)
+        {
+            continue;
+        }
 
-	free(line);
-	return (0);
+        if (access(line, X_OK) == 0)
+        {
+            execute_command(line);
+        }
+        else
+        {
+            fprintf(stderr, "./shell: No such file or directory\n");
+        }
+    }
+
+    free(line);
+    return (0);
 }
