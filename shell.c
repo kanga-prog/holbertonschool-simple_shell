@@ -8,32 +8,32 @@
  */
 void execute_command(char *command)
 {
-    pid_t pid = fork();
+	pid_t pid = fork();
 
-    if (pid == -1)
-    {
-        perror("Fork failed");
-        exit(1);
-    }
+	if (pid == -1)
+	{
+		perror("Fork failed");
+		exit(1);
+	}
 
-    if (pid == 0)
-    {
-        char *argv[2];
+	if (pid == 0)
+	{
+		char *argv[2];
 
-        argv[0] = command;
-        argv[1] = NULL;
+		argv[0] = command;
+		argv[1] = NULL;
 
-        if (execve(command, argv, NULL) == -1)
-        {
-            perror(command);
-        }
+		if (execve(command, argv, NULL) == -1)
+		{
+			perror(command);
+		}
 
-        exit(1);
-    }
-    else
-    {
-        wait(NULL);
-    }
+		exit(1);
+	}
+	else
+	{
+		wait(NULL);
+	}
 }
 
 /**
@@ -42,41 +42,41 @@ void execute_command(char *command)
  */
 int main(void)
 {
-    char *line = NULL;
-    size_t len = 0;
-    ssize_t nread;
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t nread;
 
-    while (1)
-    {
-        printf("#cisfun$ ");
-        nread = getline(&line, &len, stdin);
+	while (1)
+	{
+		printf("#cisfun$ ");
+		nread = getline(&line, &len, stdin);
 
-        if (nread == -1)
-        {
-            printf("\n");
-            break;
-        }
+		if (nread == -1)
+		{
+			printf("\n");
+			break;
+		}
 
-        if (line[nread - 1] == '\n')
-        {
-            line[nread - 1] = '\0';
-        }
+		if (line[nread - 1] == '\n')
+		{
+			line[nread - 1] = '\0';
+		}
 
-        if (strlen(line) == 0)
-        {
-            continue;
-        }
+		if (strlen(line) == 0)
+		{
+			continue;
+		}
 
-        if (access(line, X_OK) == 0)
-        {
-            execute_command(line);
-        }
-        else
-        {
-            fprintf(stderr, "./shell: No such file or directory\n");
-        }
-    }
+		if (access(line, X_OK) == 0)
+		{
+			execute_command(line);
+		}
+		else
+		{
+			fprintf(stderr, "./shell: No such file or directory\n");
+		}
+	}
 
-    free(line);
-    return (0);
+	free(line);
+	return (0);
 }
