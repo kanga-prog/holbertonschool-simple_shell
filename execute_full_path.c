@@ -12,11 +12,6 @@ char *find_full_path(char *command)
 	char full_path[1024];
 	FILE *file;
 
-	if (command[0] == '/')
-	{
-		/* Command is already a full path, return it directly*/
-		return (strdup(command));
-	}
 	if (path == NULL)
 	{
 		perror("getenv");
@@ -77,17 +72,28 @@ void execute_command(char *command, char *args[], int input_fd, int output_fd)
 			dup2(output_fd, STDOUT_FILENO);
 			close(output_fd);
 		}
-		full_path = find_full_path(command);
-		if (full_path == NULL)
+		if (command[0] == '/')
 		{
-			perror("Command not found");
-			exit(1);
+			if (execve(command, args, NULL) == -1)
+			{
+				perror("execve");
+				exit(1);
+			}
 		}
-		if (execve(full_path, args, NULL) == -1)
+		else
 		{
-			perror("execve");
-			free(full_path);
-			exit(1);
+			full_path = find_full_path(command);
+			if (full_path == NULL)
+			{
+				perror("Command not found");
+				exit(1);
+			}
+			if (execve(full_path, args, NULL) == -1)
+			{
+				perror("execve");
+				free(full_path);
+				exit(1);
+			}
 		}
 	}
 	else if (pid < 0)
