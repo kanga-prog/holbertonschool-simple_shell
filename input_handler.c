@@ -7,11 +7,12 @@
  */
 void execute_builtin(char *command, char *args)
 {
-	if (strcmp(command, "echo") == 0)
+	if (strncmp(command, "echo", 5) == 0)
 	{
 		if (args != NULL)
 		{
-			printf("%s\n", args);  /* Print arguments for echo */
+			remove_quotes(args);
+			echo_command(args);
 		}
 	}
 	else if (strcmp(command, "ls") == 0)

@@ -31,6 +31,11 @@ int search_in_path(char *command);
 
 void list_directory_contents(void);
 
+void echo_command(char *args);
+
+char *remove_quotes(char *str);
+
+
 int main(void);
 
 #endif /* SHELL_H */
