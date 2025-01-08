@@ -8,7 +8,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <dirent.h>  /* Pour manipuler les répertoires */
+#include <dirent.h>
+#include <errno.h>
 
 /* Définition de constantes */
 #define BUFFER_SIZE 1024
@@ -16,20 +17,19 @@
 
 /* Déclaration des fonctions */
 
-/* Fonction pour exécuter une commande */
 void execute_command(char *command);
 
-/* Fonction pour lister les fichiers d'un répertoire */
 void list_directory_contents(void);
 
-/* Fonction pour gérer l'entrée de l'utilisateur et l'exécution des commandes */
 void handle_input(char *line);
 
-/* Fonction pour ajouter une commande à l'historique */
 void add_to_history(const char *line);
 
-/* Fonction pour afficher l'historique des commandes */
 void print_history(void);
+
+int search_in_path(char *command);
+
+void list_directory_contents(void);
 
 int main(void);
 
