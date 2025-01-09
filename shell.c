@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 			if (bytes_read < 0)  /* Read error */
 			{
 				perror("read");
-				exit(1);
+				_exit(1);
 			}
 
 			/* Null-terminate the string after reading */
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 			if (bytes_read < 0)  /* Read error */
 			{
 				perror("read");
-				exit(1);
+				_exit(1);
 			}
 
 			input[bytes_read] = '\0';  /* Null-terminate the string */

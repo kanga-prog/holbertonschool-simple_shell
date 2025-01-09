@@ -6,7 +6,7 @@
  *
  * This function duplicates the file descriptor oldfd to newfd by closing
  * newfd first and then opening "/dev/null" as a safe placeholder.
- * 
+ *
  * Return: 0 on success, -1 on failure.
  */
 int custom_dup2(int oldfd, int newfd)
@@ -76,7 +76,7 @@ void execute_pipe(char *command1, char *command2)
 		if (custom_dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 		{
 			perror("custom_dup2");
-			exit(1);
+			_exit(1);
 		}
 
 		/* Close the write end of the pipe */
@@ -113,7 +113,7 @@ void execute_pipe(char *command1, char *command2)
 			if (custom_dup2(pipe_fd[0], STDIN_FILENO) == -1)
 			{
 				perror("custom_dup2");
-				exit(1);
+				_exit(1);
 			}
 
 			/* Close the read end of the pipe */
