@@ -76,7 +76,7 @@ void execute_pipe(char *command1, char *command2)
 		if (custom_dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 		{
 			perror("custom_dup2");
-			_exit(1);
+			exit(1);
 		}
 
 		/* Close the write end of the pipe */
@@ -113,7 +113,7 @@ void execute_pipe(char *command1, char *command2)
 			if (custom_dup2(pipe_fd[0], STDIN_FILENO) == -1)
 			{
 				perror("custom_dup2");
-				_exit(1);
+				exit(1);
 			}
 
 			/* Close the read end of the pipe */

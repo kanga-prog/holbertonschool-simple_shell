@@ -81,13 +81,13 @@ void execute_command(char *command, char *args[], int input_fd, int output_fd)
             if (new_input_fd == -1)
             {
                 perror("open input");
-                _exit(1);
+                exit(1);
             }
             close(STDIN_FILENO);  /* Close standard input */
             if (dup(new_input_fd) == -1)  /* Redirect stdin to the new file descriptor */
             {
                 perror("dup input");
-                _exit(1);
+                exit(1);
             }
             close(new_input_fd);  /* Close the file descriptor after use */
         }
@@ -99,13 +99,13 @@ void execute_command(char *command, char *args[], int input_fd, int output_fd)
             if (new_output_fd == -1)
             {
                 perror("open output");
-                _exit(1);
+                exit(1);
             }
             close(STDOUT_FILENO);  /* Close standard output */
             if (dup(new_output_fd) == -1)  /* Redirect stdout to the new file descriptor */
             {
                 perror("dup output");
-                _exit(1);
+                exit(1);
             }
             close(new_output_fd);  /* Close the file descriptor after use */
         }
@@ -116,7 +116,7 @@ void execute_command(char *command, char *args[], int input_fd, int output_fd)
             if (execve(command, args, NULL) == -1)
             {
                 perror("execve");
-                _exit(1);
+                exit(1);
             }
         }
         else
@@ -125,13 +125,13 @@ void execute_command(char *command, char *args[], int input_fd, int output_fd)
             if (full_path == NULL)
             {
                 fprintf(stderr, "%s: 1: %s: not found\n", program_name, command);
-                _exit(1);
+                exit(1);
             }
             if (execve(full_path, args, NULL) == -1)
             {
                 perror("execve");
                 free(full_path);
-                _exit(1);
+                exit(1);
             }
         }
     }
