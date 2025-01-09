@@ -12,73 +12,81 @@
  */
 void execute_command(char *command, char *args[], int input_fd, int output_fd)
 {
-  pid_t pid;
-  int input_file;
-  int output_file;
+    pid_t pid;
+    int input_file;
+    int output_file;
 
-  pid = fork();  /* Fork a new process */
+    pid = fork();  /* Fork a new process */
 
-  if (pid == 0)  /* Child process */
+    if (pid == 0)  /* Child process */
     {
-      /* Handle input redirection */
-      if (input_fd != STDIN_FILENO)
+        /* Handle input redirection */
+        if (input_fd != STDIN_FILENO)
         {
-          close(STDIN_FILENO);  /* Close standard input */
-          input_file = open(command, O_RDONLY);
-          if (input_file == -1)
+            close(STDIN_FILENO);  /* Close standard input */
+            input_file = open(command, O_RDONLY);  /* Open the input file */
+            if (input_file == -1)
             {
-              perror("open input");
-              exit(1);
+                perror("open");
+                exit(1);
             }
-          /* Set input redirection */
-          if (dup2(input_file, STDIN_FILENO) == -1)
+            /* Use the new file descriptor for input */
+            if (input_file != STDIN_FILENO)
             {
-              perror("dup2 input");
-              exit(1);
+                close(0);  /* Close file descriptor 0 (stdin) */
+                if (dup(input_file) != 0)
+                {
+                    perror("dup");
+                    exit(1);
+                }
             }
-          close(input_file);
+            close(input_file);  /* Close the opened input file */
         }
 
-      /* Handle output redirection */
-      if (output_fd != STDOUT_FILENO)
+        /* Handle output redirection */
+        if (output_fd != STDOUT_FILENO)
         {
-          close(STDOUT_FILENO);  /* Close standard output */
-          output_file = open(command, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-          if (output_file == -1)
+            close(STDOUT_FILENO);  /* Close standard output */
+            output_file = open(command, O_WRONLY | O_CREAT | O_TRUNC, 0644);  /* Open the output file */
+            if (output_file == -1)
             {
-              perror("open output");
-              exit(1);
+                perror("open");
+                exit(1);
             }
-          /* Set output redirection */
-          if (dup2(output_file, STDOUT_FILENO) == -1)
+            /* Use the new file descriptor for output */
+            if (output_file != STDOUT_FILENO)
             {
-              perror("dup2 output");
-              exit(1);
+                close(1);  /* Close file descriptor 1 (stdout) */
+                if (dup(output_file) != 1)
+                {
+                    perror("dup");
+                    exit(1);
+                }
             }
-          close(output_file);
+            close(output_file);  /* Close the opened output file */
         }
 
-      /* Check if the command is an absolute path or a shell command */
-      if (command[0] == '/')
+        /* Check if the command is an absolute path or a shell command */
+        if (command[0] == '/')
         {
-          if (execve(command, args, NULL) == -1)
+            if (execve(command, args, NULL) == -1)
             {
-              perror("execve");
-              exit(1);
+                perror("execve");
+                exit(1);
             }
         }
-      else
+        else
         {
-          fprintf(stderr, "./shell: No such file or directory\n");
-          exit(1);
+            fprintf(stderr, "./shell: No such file or directory\n");
+            exit(1);
         }
     }
-  else if (pid < 0)  /* Error if fork fails */
+    else if (pid < 0)  /* Error if fork fails */
     {
-      perror("fork");
+        perror("fork");
     }
-  else  /* Parent process */
+    else  /* Parent process */
     {
-      wait(NULL);  /* Wait for the child process to finish */
+        wait(NULL);  /* Wait for the child process to finish */
     }
 }
