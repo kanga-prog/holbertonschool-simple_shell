@@ -11,10 +11,22 @@ char *find_full_path(char *command)
 	char *dir;
 	char full_path[1024];
 	FILE *file;
+	int i = 0;
+
+	/* Loop through the environment variables to find PATH */
+	while (environ[i] != NULL)
+	{
+		if (strncmp(environ[i], "PATH=", 5) == 0)
+		{
+			path = environ[i] + 5;  /* Skip over "PATH=" */
+			break;
+		}
+		i++;
+	}
 
 	if (path == NULL)
 	{
-		perror("getenv");
+		perror("PATH not found in environment");
 		return (NULL);
 	}
 	path_copy = malloc(strlen(path) + 1); /* Allocate memory for path copy */

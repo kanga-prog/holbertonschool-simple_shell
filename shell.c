@@ -16,9 +16,11 @@ int main(void)
 
 	while (1)
 	{
-		/* Print the prompt */
-		printf("#cisfun$ ");
-
+		/* Print the prompt only in interactive mode */
+		if (isatty(STDIN_FILENO))
+		{
+			printf("#cisfun$ ");
+		}
 		/* Read the input */
 		if (fgets(input, sizeof(input), stdin) == NULL)
 		{

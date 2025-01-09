@@ -8,6 +8,8 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
+extern char **environ;
+
 #define MAX_COMMAND_LENGTH 1024
 #define MAX_ARGS 100
 
