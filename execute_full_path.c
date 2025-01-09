@@ -66,54 +66,81 @@ char *find_full_path(char *command)
  */
 void execute_command(char *command, char *args[], int input_fd, int output_fd)
 {
-	pid_t pid;
-	char *full_path;
+    pid_t pid;
+    char *full_path;
+    extern char *program_name;
 
-	pid = fork();
+    pid = fork(); /* Create a new child process */
 
-	if (pid == 0) /* Child process */
-	{
-		if (input_fd != STDIN_FILENO)
-		{
-			dup2(input_fd, STDIN_FILENO);
-			close(input_fd);
-		}
+    if (pid == 0) /* Child process */
+    {
+        /* Redirect input if necessary */
+        if (input_fd != STDIN_FILENO)
+        {
+            int new_input_fd = open(command, O_RDONLY); /* Open the file for reading */
+            if (new_input_fd == -1)
+            {
+                perror("open input");
+                exit(1);
+            }
+            close(STDIN_FILENO);  /* Close standard input */
+            if (dup(new_input_fd) == -1)  /* Redirect stdin to the new file descriptor */
+            {
+                perror("dup input");
+                exit(1);
+            }
+            close(new_input_fd);  /* Close the file descriptor after use */
+        }
 
-		if (output_fd != STDOUT_FILENO)
-		{
-			dup2(output_fd, STDOUT_FILENO);
-			close(output_fd);
-		}
-		if (command[0] == '/')
-		{
-			if (execve(command, args, NULL) == -1)
-			{
-				perror("execve");
-				exit(1);
-			}
-		}
-		else
-		{
-			full_path = find_full_path(command);
-			if (full_path == NULL)
-			{
-				perror("Command not found");
-				exit(1);
-			}
-			if (execve(full_path, args, NULL) == -1)
-			{
-				perror("execve");
-				free(full_path);
-				exit(1);
-			}
-		}
-	}
-	else if (pid < 0)
-	{
-		perror("fork");
-	}
-	else
-	{
-		wait(NULL);
-	}
+        /* Redirect output if necessary */
+        if (output_fd != STDOUT_FILENO)
+        {
+            int new_output_fd = open(command, O_WRONLY | O_CREAT | O_TRUNC, 0644); /* Open the file for writing */
+            if (new_output_fd == -1)
+            {
+                perror("open output");
+                exit(1);
+            }
+            close(STDOUT_FILENO);  /* Close standard output */
+            if (dup(new_output_fd) == -1)  /* Redirect stdout to the new file descriptor */
+            {
+                perror("dup output");
+                exit(1);
+            }
+            close(new_output_fd);  /* Close the file descriptor after use */
+        }
+
+        /* Execute the command */
+        if (command[0] == '/')
+        {
+            if (execve(command, args, NULL) == -1)
+            {
+                perror("execve");
+                exit(1);
+            }
+        }
+        else
+        {
+            full_path = find_full_path(command);
+            if (full_path == NULL)
+            {
+                fprintf(stderr, "%s: 1: %s: not found\n", program_name, command);
+                exit(1);
+            }
+            if (execve(full_path, args, NULL) == -1)
+            {
+                perror("execve");
+                free(full_path);
+                exit(1);
+            }
+        }
+    }
+    else if (pid < 0)
+    {
+        perror("fork");
+    }
+    else
+    {
+        wait(NULL); /* Wait for the child process to finish */
+    }
 }

@@ -1,6 +1,6 @@
 #include "simple_shell.h"
 
-#define MAX_COMMAND_LENGTH 1024
+char *program_name;
 
 /**
  * main - Entry point for the simple shell program.
@@ -10,13 +10,19 @@
  *
  * Return: 0 on success.
  */
-int main(void)
+int main(int argc, char **argv)
 {
 	char input[MAX_COMMAND_LENGTH];
 	ssize_t bytes_read;
 
+	(void)argv;
+	(void)argc;
+
+
 	while (1)
 	{
+		program_name = argv[0];
+
 		/* Print the prompt only in interactive mode */
 		if (isatty(STDIN_FILENO))
 		{
