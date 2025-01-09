@@ -1,60 +1,5 @@
 #include "simple_shell.h"
 /**
- * find_full_path - Finds the full path of a command.
- * @command: The command for which to find the full path.
- * Return: The full path of the command or NULL if not found.
- */
-char *find_full_path(char *command)
-{
-	char *path = getenv("PATH");
-	char *path_copy;
-	char *dir;
-	char full_path[1024];
-	FILE *file;
-	int i = 0;
-
-	/* Loop through the environment variables to find PATH */
-	while (environ[i] != NULL)
-	{
-		if (strncmp(environ[i], "PATH=", 5) == 0)
-		{
-			path = environ[i] + 5;  /* Skip over "PATH=" */
-			break;
-		}
-		i++;
-	}
-
-	if (path == NULL)
-	{
-		perror("PATH not found in environment");
-		return (NULL);
-	}
-	path_copy = malloc(strlen(path) + 1); /* Allocate memory for path copy */
-	if (path_copy == NULL)
-	{
-		perror("malloc");
-		return (NULL);
-	}
-	strcpy(path_copy, path);  /* Copy the PATH variable */
-
-	dir = strtok(path_copy, ":");
-	while (dir != NULL)
-	{
-		snprintf(full_path, sizeof(full_path), "%s/%s", dir, command);
-		file = fopen(full_path, "r");
-		if (file != NULL)
-		{
-			fclose(file);
-			free(path_copy);
-			return (strdup(full_path)); /* Return the full path */
-		}
-		dir = strtok(NULL, ":"); /* Move to the next directory */
-	}
-	free(path_copy);
-	return (NULL); /* Return NULL if command is not found */
-}
-
-/**
  * execute_command - Executes a command with arguments.
  * @command: The command to execute.
  * @args: The arguments for the command.
@@ -67,7 +12,6 @@ char *find_full_path(char *command)
 void execute_command(char *command, char *args[], int input_fd, int output_fd)
 {
 	pid_t pid;
-	char *full_path;
 
 	pid = fork();
 
@@ -94,18 +38,8 @@ void execute_command(char *command, char *args[], int input_fd, int output_fd)
 		}
 		else
 		{
-			full_path = find_full_path(command);
-			if (full_path == NULL)
-			{
-				perror("Command not found");
+				printf("./shell: No such file or directory\n");
 				exit(1);
-			}
-			if (execve(full_path, args, NULL) == -1)
-			{
-				perror("execve");
-				free(full_path);
-				exit(1);
-			}
 		}
 	}
 	else if (pid < 0)

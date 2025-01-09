@@ -60,12 +60,6 @@ int main(void)
 			input[strcspn(input, "\n")] = 0;  /* Remove newline if present */
 		}
 
-		/* Exit the shell if the user types "exit" */
-		if (strcmp(input, "exit") == 0)
-		{
-			break;
-		}
-
 		/* Parse the input and execute the command(s) */
 		parse_and_execute(input);
 
