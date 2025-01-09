@@ -6,7 +6,7 @@
  */
 char *find_full_path(char *command)
 {
-	char *path = getenv("PATH");
+	char *path;
 	char *path_copy;
 	char *dir;
 	char full_path[1024];

@@ -35,8 +35,10 @@ int main(int argc, char **argv)
 			/* Use read() to read input */
 			bytes_read = read(STDIN_FILENO, input, sizeof(input) - 1);
 			if (bytes_read == 0)  /* EOF (Ctrl+D) encountered */
+			{
+				printf("\n");
 				break;
-
+			}
 			if (bytes_read < 0)  /* Read error */
 			{
 				perror("read");
