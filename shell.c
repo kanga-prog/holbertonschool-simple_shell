@@ -21,7 +21,6 @@ int main(void)
 		if (isatty(STDIN_FILENO))
 		{
 			write(STDOUT_FILENO, "#cisfun$ ", 9); /* Using write to print prompt */
-			fflush(stdout);
 		}
 
 		/* Read the input only if in interactive mode or if input is from stdin */
@@ -30,10 +29,8 @@ int main(void)
 			/* Use read() to read input */
 			bytes_read = read(STDIN_FILENO, input, sizeof(input) - 1);
 			if (bytes_read == 0)  /* EOF (Ctrl+D) encountered */
-			{
-				printf("\n");
 				break;
-			}
+
 			if (bytes_read < 0)  /* Read error */
 			{
 				perror("read");
@@ -63,8 +60,14 @@ int main(void)
 			input[strcspn(input, "\n")] = 0;  /* Remove newline if present */
 		}
 
+		/* Exit the shell if the user types "exit" */
+		if (strcmp(input, "exit") == 0)
+		{
+			break;
+		}
+
 		/* Parse the input and execute the command(s) */
-		execute_command(input);
+		parse_and_execute(input);
 
 		/* If in non-interactive mode, exit after executing the command */
 		if (!isatty(STDIN_FILENO))
@@ -72,7 +75,6 @@ int main(void)
 			break;
 		}
 	}
-	fflush(stdout);
 
 	return (0);
 }
