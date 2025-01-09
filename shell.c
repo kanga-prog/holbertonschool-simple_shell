@@ -13,23 +13,52 @@
 int main(void)
 {
 	char input[MAX_COMMAND_LENGTH];
+	ssize_t bytes_read;
 
 	while (1)
 	{
 		/* Print the prompt only in interactive mode */
 		if (isatty(STDIN_FILENO))
 		{
-			printf("#cisfun$ ");
-		}
-		/* Read the input */
-		if (fgets(input, sizeof(input), stdin) == NULL)
-		{
-			perror("fgets");
-			exit(1);
+			write(STDOUT_FILENO, "#cisfun$ ", 9); /* Using write to print prompt */
 		}
 
-		/* Remove the trailing newline character */
-		input[strcspn(input, "\n")] = 0;
+		/* Read the input only if in interactive mode or if input is from stdin */
+		if (isatty(STDIN_FILENO))
+		{
+			/* Use read() to read input */
+			bytes_read = read(STDIN_FILENO, input, sizeof(input) - 1);
+			if (bytes_read == 0)  /* EOF (Ctrl+D) encountered */
+				break;
+
+			if (bytes_read < 0)  /* Read error */
+			{
+				perror("read");
+				exit(1);
+			}
+
+			/* Null-terminate the string after reading */
+			input[bytes_read] = '\0';
+
+			/* Remove the trailing newline character, if any */
+			input[strcspn(input, "\n")] = 0;
+		}
+		else
+		{
+			/* In non-interactive mode, assume input is already provided (stdin redirected) */
+			bytes_read = read(STDIN_FILENO, input, sizeof(input) - 1);
+			if (bytes_read == 0)  /* EOF encountered */
+				break;
+
+			if (bytes_read < 0)  /* Read error */
+			{
+				perror("read");
+				exit(1);
+			}
+
+			input[bytes_read] = '\0';  /* Null-terminate the string */
+			input[strcspn(input, "\n")] = 0;  /* Remove newline if present */
+		}
 
 		/* Exit the shell if the user types "exit" */
 		if (strcmp(input, "exit") == 0)
@@ -39,6 +68,12 @@ int main(void)
 
 		/* Parse the input and execute the command(s) */
 		parse_and_execute(input);
+
+		/* If in non-interactive mode, exit after executing the command */
+		if (!isatty(STDIN_FILENO))
+		{
+			break;
+		}
 	}
 
 	return (0);
