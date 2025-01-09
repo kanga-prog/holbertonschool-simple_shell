@@ -23,7 +23,7 @@ void remove_quotes(char *arg);
 char *find_full_path(char *command);
 
 /* Function to execute a single command */
-void execute_command(char *command, char *args[], int input_fd, int output_fd);
+void execute_command(char *command);
 
 /* Function to execute pipe command */
 void execute_pipe(char *command1, char *command2);

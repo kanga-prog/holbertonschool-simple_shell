@@ -61,7 +61,7 @@ int main(void)
 		}
 
 		/* Parse the input and execute the command(s) */
-		parse_and_execute(input);
+		execute_command(input);
 
 		/* If in non-interactive mode, exit after executing the command */
 		if (!isatty(STDIN_FILENO))
