@@ -21,6 +21,7 @@ int main(void)
 		if (isatty(STDIN_FILENO))
 		{
 			write(STDOUT_FILENO, "#cisfun$ ", 9); /* Using write to print prompt */
+			fflush(stdout);
 		}
 
 		/* Read the input only if in interactive mode or if input is from stdin */
@@ -29,8 +30,10 @@ int main(void)
 			/* Use read() to read input */
 			bytes_read = read(STDIN_FILENO, input, sizeof(input) - 1);
 			if (bytes_read == 0)  /* EOF (Ctrl+D) encountered */
+			{
+				printf("\n");
 				break;
-
+			}
 			if (bytes_read < 0)  /* Read error */
 			{
 				perror("read");
@@ -69,6 +72,7 @@ int main(void)
 			break;
 		}
 	}
+	fflush(stdout);
 
 	return (0);
 }
