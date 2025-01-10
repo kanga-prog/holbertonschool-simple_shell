@@ -1,4 +1,4 @@
-.TH SIMPLE_SHELL  "Simple Shell"
+.TH SIMPLE_SHELL  "hsh" "Simple Shell" 
 
 .SH NAME
 simple_shell \- A simple shell that executes commands and handles built-in commands.
