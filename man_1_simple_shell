@@ -1,1 +1,67 @@
-simple shell
+.TH SIMPLE_SHELL  "Simple Shell"
+
+.SH NAME
+simple_shell \- A simple shell that executes commands and handles built-in commands.
+
+.SH SYNOPSIS
+.B simple_shell
+.RI [ "command" ]
+
+.SH DESCRIPTION
+The simple_shell program is a basic interactive shell that allows executing external commands as well as built-in commands. It provides the ability to:
+- Execute external commands
+- Exit the shell with the "exit" command
+- Display the current environment with the "env" command, with the `USER` variable always set to `root`
+
+.SH BUILT-IN COMMANDS
+
+.TP
+.B exit
+Exits the shell with an exit status code. The "exit" command without arguments will exit the shell with a status code of 0. If a status code is provided, the shell will exit with that code.
+
+.TP
+.B env
+Displays all the environment variables available in the shell. The `USER` variable will always be shown as `root`, regardless of the actual user executing the shell.
+
+.SH USAGE
+Once launched, the shell waits for the user to input a command. The user can enter either a valid command from the system's PATH or use built-in commands.
+
+.LP
+When a command is entered, the shell checks if it is a built-in command ("exit" or "env"). If it is not, the shell attempts to execute the command by creating a child process. If the command does not exist, an error message is displayed.
+
+.SH EXAMPLES
+
+.TP
+Displaying the environment:
+.nf
+$ env
+USER=root
+HOME=/home
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+...
+
+.TP
+Exiting the shell:
+.nf
+$ exit
+(The shell exits with exit code 0)
+.fi
+
+.SH FUNCTIONS
+The main functions of the shell include:
+- Managing external commands via the file system.
+- Handling built-in commands (such as `exit` and `env`).
+- Managing user input with a prompt.
+- Handling the environment via the "env" command, with the `USER` variable always set to `root`.
+- Error handling related to command execution.
+
+.SH AUTHORS
+Kanga brice
+Wilfried Guele
+
+.SH COPYRIGHT
+(C) 2025 Some Author. All rights reserved.
+
+.SH SEE ALSO
+bash(1), sh(1), execve(2)
+
