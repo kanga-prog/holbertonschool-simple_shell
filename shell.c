@@ -75,7 +75,8 @@ int main(int argc, char **argv)
 		}
 		else if (strcmp(input, "env") == 0)
 		{
-			env_c();  /* Call env_c to print the environment variables */
+			_env();  /* Call env_c to print the environment variables */
+			continue;
 		}
 
 		/* Parse the input and execute the command(s) */
