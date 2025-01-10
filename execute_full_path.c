@@ -113,7 +113,7 @@ void execute_command(char *command, char *args[], int input_fd, int output_fd)
         /* Execute the command */
         if (command[0] == '/')
         {
-            if (execve(command, args, NULL) == -1)
+            if (execve(command, args, environ) == -1)
             {
                 perror("execve");
                 exit(1);
