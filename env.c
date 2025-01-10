@@ -8,13 +8,16 @@
  * "KEY=VALUE" followed by a newline.
  * It does not take any arguments and does not return a value.
  */
+
+extern char **environ;
+
 void _env(void)
 {
-    char **env = environ;  /* Pointeur vers le tableau d'environnement */
+    char **env = environ;
 
-    while (*env)  /* Tant qu'il y a des variables d'environnement */
+    while (*env)
     {
-        printf("%s\n", *env);  /* Afficher chaque variable */
-        env++;  /* Passer à la suivante */
+        printf("%s\n", *env);
+        env++;
     }
 }
