@@ -8,15 +8,18 @@
  * "KEY=VALUE" followed by a newline.
  * It does not take any arguments and does not return a value.
  */
-void env_c(void)
+int env_c(void)
 {
-    extern char **environ;  /* Global variable that holds the environment */
-    char **env = environ;   /* Pointer to the environment variables */
+	extern char **environ;
+	size_t i;
+	int len;
 
-    /* Loop through the environment and print each variable */
-    while (*env)
-    {
-        printf("%s\n", *env);  /* Print each environment variable */
-        env++;  /* Move to the next environment variable */
-    }
+	for (i = 0; environ[i] != NULL; i++)
+	{
+		len = strlen(environ[i]);
+		write(1, environ[i], len);
+		write(STDOUT_FILENO, "\n", 1);
+	}
+	return (0);
+
 }

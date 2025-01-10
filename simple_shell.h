@@ -31,6 +31,6 @@ void execute_pipe(char *command1, char *command2);
 /* Function to parse and execute commands */
 void parse_and_execute(char *input);
 
-void env_c(void);
+int env_c(void);
 
 #endif /* SIMPLE_SHELL_H */
