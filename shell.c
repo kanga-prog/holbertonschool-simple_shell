@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 		/* Exit the shell if the user types "exit" */
 		if (strcmp(input, "exit") == 0)
 		{
-			break;
+			_exit(0);
 		}
 		else if (strcmp(input, "env") == 0)
 		{
