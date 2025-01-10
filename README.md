@@ -61,4 +61,4 @@ Manipulation de l'environnement : Le shell peut afficher l'environnement courant
 Limites
 Ce shell ne supporte pas encore certaines fonctionnalités avancées comme la gestion des tuyaux, des redirections ou l'exécution en arrière-plan. De plus, il ne prend en charge que des commandes sans arguments ou avec un nombre limité d'arguments.
 
-<a href="https://zupimages.net/viewer.php?id=25/02/c7vr.png"><img src="https://zupimages.net/up/25/02/c7vr.png" alt="" /></a>
+https://zupimages.net/viewer.php?id=25/02/792p.png
