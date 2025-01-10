@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 		/* Print the prompt only in interactive mode */
 		if (isatty(STDIN_FILENO))
 		{
-			write(STDOUT_FILENO, "$ ", 3); /* Using write to print prompt */
+			write(STDOUT_FILENO, "#cisfun$ ", 9); /* Using write to print prompt */
 		}
 
 		/* Read the input only if in interactive mode or if input is from stdin */
