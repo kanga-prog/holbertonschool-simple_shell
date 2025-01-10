@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 		{
 			_exit(0);
 		}
-		else if (strcmp(input, "env") == 0)
+		if (strcmp(input, "env") == 0)
 		{
 			_env();  /* Call env_c to print the environment variables */
 			continue;
