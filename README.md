@@ -27,9 +27,8 @@ La conception de ce shell repose sur une approche minimaliste, permettant une ex
 
 Le projet est conçu pour être compilé sur un système Ubuntu 20.04 LTS à l'aide de `gcc`. Les fichiers source doivent être compilés avec les options suivantes :
 
-```bash
 gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
-Cette commande génère un exécutable appelé hshqui peut être exécuté à partir du terminal.
+Cette commande génère un exécutable appelé hshqui peut être exécuté à partir du terminal
 
 Utilisation
 Une fois l'exécutable compilé, vous pouvez démarrer le shell en mode interactif avec la commande suivante :
@@ -62,4 +61,4 @@ Manipulation de l'environnement : Le shell peut afficher l'environnement courant
 Limites
 Ce shell ne supporte pas encore certaines fonctionnalités avancées comme la gestion des tuyaux, des redirections ou l'exécution en arrière-plan. De plus, il ne prend en charge que des commandes sans arguments ou avec un nombre limité d'arguments.
 
-
+<a href="https://zupimages.net/viewer.php?id=25/02/c7vr.png"><img src="https://zupimages.net/up/25/02/c7vr.png" alt="" /></a>
