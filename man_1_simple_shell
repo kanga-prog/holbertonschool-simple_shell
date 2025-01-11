@@ -48,8 +48,8 @@ This command prints the current environment variables, displaying each one in th
 .IP 1
 $ ./simple_shell
 #cisfun$ ls
-AUTHORS    core.457  execute_full_path.c  hsh  parse_and_execute.c  shell  shell_0.3
-README.md  core.467  execute_pipe.c       man_1_simple_shell  remove_quotes.c  shell.c  simple_shell.h
+AUTHORS    core.457  execute_full_path.c  hsh  parse_and_execute.c  hsh  shell_0.3
+README.md  core.467  man_1_simple_shell  remove_quotes.c  shell.c  simple_shell.h
 #cisfun$ exit
 $ 
 
