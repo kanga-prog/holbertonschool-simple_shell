@@ -1,67 +1,86 @@
-.TH SIMPLE_SHELL  "hsh" "Simple Shell" 
-
+.TH SIMPLE_SHELL 1 "January 2025" "1.0" "Simple Shell Man Page"
 .SH NAME
-simple_shell \- A simple shell that executes commands and handles built-in commands.
-
-.SH SYNOPSIS
 .B simple_shell
-.RI [ "command" ]
-
-.SH DESCRIPTION
-The simple_shell program is a basic interactive shell that allows executing external commands as well as built-in commands. It provides the ability to:
-- Execute external commands
-- Exit the shell with the "exit" command
-- Display the current environment with the "env" command, with the `USER` variable always set to `root`
-
-.SH BUILT-IN COMMANDS
-
-.TP
-.B exit
-Exits the shell with an exit status code. The "exit" command without arguments will exit the shell with a status code of 0. If a status code is provided, the shell will exit with that code.
-
-.TP
-.B env
-Displays all the environment variables available in the shell. The `USER` variable will always be shown as `root`, regardless of the actual user executing the shell.
-
-.SH USAGE
-Once launched, the shell waits for the user to input a command. The user can enter either a valid command from the system's PATH or use built-in commands.
-
-.LP
-When a command is entered, the shell checks if it is a built-in command ("exit" or "env"). If it is not, the shell attempts to execute the command by creating a child process. If the command does not exist, an error message is displayed.
-
-.SH EXAMPLES
-
-.TP
-Displaying the environment:
-.nf
-$ env
-USER=root
-HOME=/home
-PATH=/usr/bin:/bin:/usr/sbin:/sbin
-...
-
-.TP
-Exiting the shell:
-.nf
-$ exit
-(The shell exits with exit code 0)
-.fi
-
-.SH FUNCTIONS
-The main functions of the shell include:
-- Managing external commands via the file system.
-- Handling built-in commands (such as `exit` and `env`).
-- Managing user input with a prompt.
-- Handling the environment via the "env" command, with the `USER` variable always set to `root`.
-- Error handling related to command execution.
-
-.SH AUTHORS
-Kanga brice
-Wilfried Guele
-
+\- A simple Unix shell program for educational purposes
+.SH SYNOPSIS
+.B ./simple_shell
+[command] [options] [FILE]
 .SH COPYRIGHT
-(C) 2025 Some Author. All rights reserved.
+.B simple_shell
+is Copyright (C) [Your Name] and licensed under the MIT license.
+.SH DESCRIPTION
+.B simple_shell
+(Simple Shell) is a simplified command-line interpreter created as part of a Holberton School project, designed to simulate a basic Unix shell. The program is used to understand the inner workings of shell programming, such as parsing commands and executing external programs.
+.B Overview
+The simple shell program simulates basic functionalities of a Unix shell like
+.B bash or 
+.B dash. It can run both in interactive and non-interactive modes, executing commands entered by the user or provided as input via a file or pipe.
+.SH OPTIONS
+.B simple_shell
+operates in both
+.I interactive
+and
+.I non-interactive
+mode.
+The user can invoke
+.B simple_shell
+and begin working directly in the shell, or use it by feeding commands via redirection or pipes.
+
+.SH ARGUMENTS
+The first argument, argument 0, is understood to be the name of the program (`./simple_shell`). All subsequent arguments are passed as commands or options to the shell.
+
+.SH INVOCATION
+.B simple_shell
+can be invoked in the following ways:
+.IP 1
+$ ./simple_shell
+.IP 2
+$ echo "command" | ./simple_shell
+.IP 3
+$ ./simple_shell < commands.txt
+.SH BUILTIN COMMANDS
+The following built-in commands are supported:
+.IP "\fBexit\fR"
+This command exits the shell. It takes no arguments. When the user types "exit", the shell terminates.
+.IP "\fBenv\fR"
+This command prints the current environment variables, displaying each one in the format `KEY=VALUE`.
+.SH EXAMPLES
+.IP 1
+$ ./simple_shell
+#cisfun$ ls
+AUTHORS    core.457  execute_full_path.c  hsh  parse_and_execute.c  shell  shell_0.3
+README.md  core.467  execute_pipe.c       man_1_simple_shell  remove_quotes.c  shell.c  simple_shell.h
+#cisfun$ exit
+$ 
+
+.IP 2
+$ echo "env" | ./simple_shell
+USER=your_user
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOME=/home/your_user
+#cisfun$ exit
+Exiting simple_shell...
+$
+
+.SH SHELL OPERATION
+In interactive mode, when the shell starts, it displays a prompt (`#cisfun$`) and waits for the user to input commands. After each command, the shell executes it and prints the prompt again. In non-interactive mode, the program accepts input from files or pipes and executes the commands sequentially.
+
+.SH EXIT STATUS
+The shell returns an exit status of 0 on success and 1 in case of error. For example, if a command is not found or cannot be executed, the shell will return 1 and print an error message.
 
 .SH SEE ALSO
-bash(1), sh(1), execve(2)
+.I execve(2),
+.I fork(2),
+.I read(2),
+.I write(2),
+.I waitpid(2)
 
+.SH BUGS
+There are no known bugs. Please report any issues with
+.B simple_shell
+to https://github.com/kanga-prog/holberton-simple_shell/issues
+
+.SH AUTHOR
+Brice Kanga
+Wilfried Guele
+Nomen Ratsimba
